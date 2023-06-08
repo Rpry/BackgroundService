@@ -1,10 +1,7 @@
-using System;
 using BackgroundService.Consumers;
 using GreenPipes;
 using MassTransit;
 using MassTransit.RabbitMqTransport;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace BackgroundService
 {

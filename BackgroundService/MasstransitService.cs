@@ -1,8 +1,4 @@
-using System.Threading;
-using System.Threading.Tasks;
 using MassTransit;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace BackgroundService
 {
