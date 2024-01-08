@@ -1,7 +1,9 @@
 using BackgroundService.Consumers;
+using BackgroundService.Settings;
 using GreenPipes;
 using MassTransit;
 using MassTransit.RabbitMqTransport;
+using WebApi.Settings;
 
 namespace BackgroundService
 {
@@ -12,33 +14,43 @@ namespace BackgroundService
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+            
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddMassTransit(x => {
+                    services.AddMassTransit(x =>
+                    {
                         x.AddConsumer<EventConsumer>();
                         x.UsingRabbitMq((context, cfg) =>
                         {
-                            Configure(cfg);
+                            ConfigureRmq(cfg, configuration);
                             RegisterEndPoints(cfg);
                         });
                     });
                     services.AddHostedService<MasstransitService>();
                 });
-        
+        }
+
         /// <summary>
-        /// КОнфигурирование
+        /// Конфигурирование RMQ.
         /// </summary>
-        /// <param name="configurator"></param>
-        private static void Configure(IRabbitMqBusFactoryConfigurator configurator)
+        /// <param name="configurator"> Конфигуратор RMQ. </param>
+        /// <param name="configuration"> Конфигурация приложения. </param>
+        private static void ConfigureRmq(IRabbitMqBusFactoryConfigurator configurator, IConfiguration configuration)
         {
-            configurator.Host("hawk.rmq.cloudamqp.com",
-                "iatvfquz",
+            var rmqSettings = configuration.Get<ApplicationSettings>().RmqSettings;
+            configurator.Host(rmqSettings.Host,
+                rmqSettings.VHost,
                 h =>
                 {
-                    h.Username("iatvfquz");
-                    h.Password("G68bk0zxzH0ncOvMlmfyYapLaCqwjiRi");
+                    h.Username(rmqSettings.Login);
+                    h.Password(rmqSettings.Password);
                 });
         }
         
