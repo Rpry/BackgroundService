@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: notificationservice
-          image: 'notificationservice:2.1'
+          image: 'ghcr.io/rpry/otus_notification_service:2.1'
+          #image: 'notificationservice:2.1'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
