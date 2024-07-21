@@ -67,6 +67,8 @@ namespace BackgroundService
                 {
                     r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
                 });
+                e.PrefetchCount = 1;
+                e.UseConcurrencyLimit(1);
             });
 
         }
