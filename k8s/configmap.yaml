@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notificationservice-configmap 
+  namespace: otus
+data:
+  ASPNETCORE_ENVIRONMENT: Development
+  RMQSettings__Host: hawk.rmq.cloudamqp.com
+  RMQSettings__VHost: iatvfquz
+  RMQSettings__Login: iatvfquz

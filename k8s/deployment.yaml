@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notificationservice-deployment
+  namespace: otus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notificationservice
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: notificationservice
+    spec:
+      containers:
+        - name: notificationservice
+          image: 'notificationservice:2.1'
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: notificationservice-configmap
+            - secretRef:
+                name: notificationservice-secrets
