@@ -1,9 +1,6 @@
 using BackgroundService.Consumers;
 using BackgroundService.Settings;
-using GreenPipes;
 using MassTransit;
-using MassTransit.RabbitMqTransport;
-using WebApi.Settings;
 
 namespace BackgroundService
 {
@@ -67,8 +64,6 @@ namespace BackgroundService
                 {
                     r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
                 });
-                e.PrefetchCount = 1;
-                e.UseConcurrencyLimit(1);
             });
 
         }
